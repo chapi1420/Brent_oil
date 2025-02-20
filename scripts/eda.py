@@ -58,23 +58,40 @@ class BrentOilEDA:
         plt.ylabel("Frequency")
         plt.show()
 
-    def detect_change_points(self):
-        """Use change point detection to identify major shifts in oil prices."""
+   
+
+    def detect_change_points(self, penalty=20):
+        """Detect and visualize major shifts in oil prices using change point detection."""
+
         algo = rpt.Pelt(model="rbf").fit(self.df['Price'].values)
-        change_points = algo.predict(pen=10)  # Adjust penalty for sensitivity
+        change_points = algo.predict(pen=penalty)  
 
-        # Plot price with detected change points
-        plt.figure(figsize=(12, 6))
-        plt.plot(self.df.index, self.df['Price'], label="Oil Price", color='blue')
-        for cp in change_points:
-            plt.axvline(self.df.index[cp-1], color='red', linestyle='dashed', label="Change Point")
+        plt.figure(figsize=(14, 6))
+        plt.plot(self.df.index, self.df['Price'], label="Oil Price", color='navy', linewidth=2)
 
-        plt.title("⚠️ Major Oil Price Change Points")
-        plt.xlabel("Year")
-        plt.ylabel("Price (USD)")
-        plt.legend()
-        plt.grid(True)
+        for i, cp in enumerate(change_points):
+            if cp < len(self.df):  
+                plt.axvline(self.df.index[cp-1], color='blue', linestyle='dashed', linewidth=0.8, alpha=0.8)
+        
+        plt.title("⚠️ Major Oil Price Change Points", fontsize=16, fontweight='bold')
+        plt.xlabel("Year", fontsize=14)
+        plt.ylabel("Price (USD)", fontsize=14)
+
+        plt.grid(True, linestyle='--', alpha=0.6)
+
+        plt.legend(["Oil Price", "Change Points"], loc="upper left", fontsize=12)
+
+        events = {
+            "2008 Financial Crisis": "2008-07-01",
+            "COVID-19 Crash": "2020-04-01"
+        }
+        for event, date in events.items():
+            plt.axvline(pd.to_datetime(date), color='red', linestyle='dashdot', linewidth=1)
+            plt.text(pd.to_datetime(date), max(self.df['Price']) * 0.9, event, rotation=0,
+                    verticalalignment='bottom', fontsize=10, color='black')
+
         plt.show()
+
 
     def monthly_trends_heatmap(self):
         """Generate a heatmap to analyze monthly trends over the years."""
