@@ -83,7 +83,9 @@ class BrentOilEDA:
 
         events = {
             "2008 Financial Crisis": "2008-07-01",
-            "COVID-19 Crash": "2020-04-01"
+            "COVID-19\n Crash": "2020-04-01",
+            "overproduction": "2016-01-01",
+            "post COVID-19": "2022-04-01"
         }
         for event, date in events.items():
             plt.axvline(pd.to_datetime(date), color='red', linestyle='dashdot', linewidth=1)
@@ -110,7 +112,10 @@ class BrentOilEDA:
         """Compare oil prices before and after major events."""
         event_dates = {
             "COVID-19 Crash": "2020-03-01",
-            "2008 Financial Crisis": "2008-09-15"
+            "2008 Financial Crisis": "2008-09-15",
+            "2016 overproduction": "2016-01-01",
+             "post COVID-19": "2022-04-01"
+
         }
 
         plt.figure(figsize=(12, 6))
