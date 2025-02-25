@@ -13,12 +13,12 @@ class BrentOilModelAPI:
 
     def predict(self):
         data = request.json  # Get data from the request
-        input_data = np.array(data['input']).reshape(-1, 1)  # Adjust based on your model's input shape
+        input_data = np.array(data['input']).reshape(-1, 1)
         input_data_scaled = self.scaler.transform(input_data)
 
         # Make prediction
         prediction = self.model.predict(input_data_scaled)
-        prediction = self.scaler.inverse_transform(prediction)  # Inverse transform if necessary
+        prediction = self.scaler.inverse_transform(prediction)  
 
         return jsonify({'prediction': prediction.tolist()})
 
@@ -26,7 +26,7 @@ class BrentOilModelAPI:
         self.app.run(debug=debug)
 
 if __name__ == '__main__':
-    model_path = 'path_to_your_model.pkl'  # Adjust the path accordingly
-    scaler_path = 'path_to_your_scaler.pkl'  # If you used a scaler
+    model_path = '/home/nahomnadew/Desktop/10x/week10/Brent_oil/model.h5'  
+    scaler_path = '/home/nahomnadew/Desktop/10x/week10/Brent_oil/scaler.pkl'  
     api = BrentOilModelAPI(model_path, scaler_path)
     api.run()
