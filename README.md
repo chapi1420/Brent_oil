@@ -1,104 +1,54 @@
-# Brent Oil Price Analysis
+# Brent Oil Price Analysis Project
 
 ## Overview
+This project focuses on analyzing how significant political and economic events influence Brent oil prices. By employing statistical modeling and change point analysis, we aim to provide actionable insights for investors, analysts, and policymakers.
 
-This project analyzes Brent oil price data to uncover trends, detect major change points, and explore relationships between price fluctuations and external factors. The analysis involves preprocessing raw data, conducting exploratory data analysis (EDA), and visualizing key insights.
+## Business Objective
+The primary goal is to study the impact of key events (political decisions, conflicts, sanctions, and OPEC policies) on Brent oil prices, enabling stakeholders to make informed decisions.
 
----
+## Situational Overview
+As a data scientist at Birhan Energies, a consultancy firm specializing in data-driven insights for the energy sector, the analysis aims to:
+- Identify key events affecting Brent oil prices over the past decade.
+- Measure the impact of these events on price changes.
+- Provide clear, data-driven insights to guide investment strategies and policy development.
 
-## Project Structure
+## Data
+The dataset includes historical Brent oil prices from May 20, 1987, to September 30, 2022, with the following fields:
+- **Date**: The date of the recorded price (formatted as ‘day-month-year’).
+- **Price**: The price of Brent oil in USD per barrel.
 
-### 1. **Step 1: Data Preprocessing**
+## Learning Outcomes
+- **Skills**: 
+  - Statistical Modelling using PyMC3
+  - Understanding Bayesian inference and Monte Carlo Markov Chain
+- **Knowledge**: 
+  - Probability distributions and their relevance
+  - Time series analysis techniques
 
-- **Objective**: Clean and prepare the dataset for analysis.
-- **Key Steps**:
-  - Load raw data from CSV.
-  - Convert date columns to `datetime` format.
-  - Handle missing values by dropping or imputing them.
-  - Remove duplicate records to ensure data integrity.
-  - Set `Date` as the index for time-series analysis.
-  - Save the cleaned dataset for further processing.
-- **Output**: A structured and clean dataset ready for EDA.
+## Project Tasks
+### Task 1: Data Analysis Workflow
+- Define the data analysis workflow.
+- Understand model inputs, parameters, and outputs.
+- Identify assumptions and limitations.
 
-### 2. **Step 2: Exploratory Data Analysis (EDA)**
+### Task 2: Analyze Brent Oil Prices
+- Apply time series analysis techniques (e.g., ARIMA, GARCH).
+- Explore advanced models (e.g., VAR, LSTM) to capture market conditions.
+- Investigate economic indicators and technological changes affecting oil prices.
 
-- **Objective**: Gain insights into historical oil price trends.
-- **Key Steps**:
-  - Compute summary statistics (mean, median, standard deviation, etc.).
-  - Visualize the historical trend of oil prices over the years.
-  - Analyze average oil price per month to identify seasonality.
-  - Detect major change points in price fluctuations using `ruptures`.
-  - Overlay historical events to explore correlations with price changes.
-- **Output**: Graphical insights and statistical summaries that highlight patterns in oil prices.
+### Task 3: Develop an Interactive Dashboard
+- Build a dashboard using Flask (backend) and React (frontend).
+- Visualize analysis results, allowing users to explore how events impact oil prices.
 
----
+## Key Features of the Dashboard
+- Interactive visualizations of historical trends and correlations with events.
+- Filters and date range selectors for detailed exploration.
+- Display of key indicators like volatility and model accuracy metrics.
 
-## Key Features
-
-1. **Data Preprocessing**:
-   - Ensures data consistency and removes inaccuracies.
-   - Standardizes date formats for time-series analysis.
-2. **Statistical Analysis**:
-   - Generates key descriptive statistics for understanding trends.
-3. **Visualization**:
-   - Uses `Matplotlib` and `Seaborn` to create insightful visualizations.
-   - Detects significant change points in price trends with `ruptures`.
-   - Highlights key historical events affecting oil prices.
-
----
-
-## Requirements
-
-- **Python**: 3.8 or later
-- **Libraries**:
-  - `pandas`
-  - `numpy`
-  - `matplotlib`
-  - `seaborn`
-  - `ruptures`
-  - `datetime`
-
----
-
-## Installation
-
+## Installation Instructions
 1. Clone the repository:
-
    ```bash
-   git clone https://github.com/your-repository/oil-price-analysis.git
-   cd oil-price-analysis
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
----
-
-## Usage
-
-Run the data preprocessing script:
-
-```bash
-python preprocess_data.py
-```
-
-Run the exploratory analysis script:
-
-```bash
-python eda_analysis.py
-```
-
----
-
-## Next Steps
-
-- Implement predictive modeling to forecast future oil prices.
-- Deploy insights via an interactive Streamlit dashboard.
-
----
+   git clone https://github.com/chapi1420/Brent_oil.git
 
 ## Author
 
