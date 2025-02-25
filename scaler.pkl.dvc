@@ -1,0 +1,5 @@
+outs:
+- md5: 088da49e3e643e70208f829994f665f3
+  size: 1023
+  hash: md5
+  path: scaler.pkl
