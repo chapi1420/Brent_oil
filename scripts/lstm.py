@@ -3,9 +3,10 @@ import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout
+from tensorflow.keras.layers import LSTM, Dense, Dropout, Input
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error
+import joblib
 
 
 class BrentOilLSTM:
@@ -41,24 +42,37 @@ class BrentOilLSTM:
 
     def build_lstm_model(self):
         """Build and compile the LSTM model"""
-        self.model = Sequential([
-            LSTM(15, return_sequences=True, input_shape=(self.lookback, 1)),
-            Dropout(0.2),
-            LSTM(50, return_sequences=False),
-            Dropout(0.2),
-            Dense(1)
-        ])
+        self.model = Sequential()
+        self.model.add(Input(shape=(self.lookback, 1)))  # Use Input layer
+        self.model.add(LSTM(50, return_sequences=True))
+        self.model.add(Dropout(0.2))
+        self.model.add(LSTM(50, return_sequences=False))
+        self.model.add(Dropout(0.2))
+        self.model.add(Dense(1))
         self.model.compile(optimizer='adam', loss='mean_squared_error')
         print("✅ LSTM model built!")
 
     def train_lstm(self, epochs=50, batch_size=32):
         """Train the LSTM model"""
-        self.model.fit(self.X_train, self.y_train, epochs=epochs, batch_size=batch_size, validation_data=(self.X_test, self.y_test), verbose=1)
+        # Reshape the training data for LSTM input
+        self.model.fit(self.X_train.reshape(-1, self.lookback, 1), self.y_train, 
+                    epochs=epochs, batch_size=batch_size, 
+                    validation_data=(self.X_test.reshape(-1, self.lookback, 1), self.y_test), 
+                    verbose=1)
+        
         print("✅ LSTM model trained!")
+        
+        # Save the trained model
+        self.model.save('model.h5')
+        print("Model saved to model.h5")
+        
+        # Save the scaler using joblib
+        joblib.dump(self.scaler, 'scaler.pkl')  # Ensure you import joblib at the top of your file
+        print("Scaler saved to scaler.pkl")
 
     def evaluate_model(self):
         """Evaluate LSTM model performance"""
-        predictions = self.model.predict(self.X_test)
+        predictions = self.model.predict(self.X_test.reshape(-1, self.lookback, 1))
         predictions = self.scaler.inverse_transform(predictions.reshape(-1, 1))
         actuals = self.scaler.inverse_transform(self.y_test.reshape(-1, 1))
 
@@ -68,22 +82,34 @@ class BrentOilLSTM:
 
     def forecast(self, steps=30):
         """Forecast future prices using LSTM"""
-        input_seq = self.X_test[-1].reshape(1, self.lookback, 1)
-        predictions = []
-        
-        for _ in range(steps):
-            pred = self.model.predict(input_seq)
-            predictions.append(pred[0][0])
-            input_seq = np.roll(input_seq, -1)
-            input_seq[0, -1, 0] = pred[0][0]
+        if self.X_test.shape[0] == 0:
+            raise ValueError("❌ Error: X_test is empty. Check your data preprocessing.")
 
+        input_seq = np.array(self.X_test[-1]).reshape(1, self.lookback, 1).astype(np.float32)
+
+        predictions = []
+
+        for _ in range(steps):
+            print(f"Input sequence shape: {input_seq.shape}")  # Debugging line
+
+            pred = self.model.predict(input_seq, verbose=0)
+
+            pred_value = float(pred[0, 0])
+            predictions.append(pred_value)
+
+            # Shift input sequence and append the new prediction
+            input_seq = np.roll(input_seq, -1, axis=1)
+            input_seq[0, -1, 0] = pred_value  # Replace last value with prediction
+
+        # Inverse transform predictions
         predictions = self.scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
+
         print(f"📈 LSTM Forecast for next {steps} days:\n", predictions.flatten())
         return predictions.flatten()
 
 # Example Usage
 if __name__ == "__main__":
-    lstm_model = BrentOilLSTM("/home/nahomnadew/Desktop/10x/week10/Brent_oil/Data/Data/processed_BrentOilPrices.csv")
+    lstm_model = BrentOilLSTM("/home/nahomnadew/Desktop/10x/week10/Brent_oil/Data/Data/processed_BrentOilPrices_ML.csv")
 
     # Run LSTM pipeline
     lstm_model.load_and_preprocess_data()
