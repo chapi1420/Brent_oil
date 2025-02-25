@@ -1,2 +1,4 @@
 /Data
 scripts/.env
+/scaler.pkl
+/model.h5
