@@ -15,7 +15,7 @@ class BrentOilFeatureEngineering:
     def load_data(self):
         """Load dataset from CSV"""
         self.df = pd.read_csv(self.file_path, parse_dates=['Date'], index_col='Date')
-        self.df = self.df.sort_index()  # Ensure data is sorted by date
+        self.df = self.df.sort_index()  
         print("✅ Data loaded successfully!")
         return self.df
 
@@ -26,6 +26,7 @@ class BrentOilFeatureEngineering:
         self.df['day'] = self.df.index.day
         self.df['day_of_week'] = self.df.index.dayofweek
         self.df['days_since_start'] = (self.df.index - self.df.index.min()).days
+        self.df.drop['Date' axis=1, inpllace=True]
         print("✅ Datetime features created!")
 
     def create_lag_features(self, lags=[1, 7, 30]):
