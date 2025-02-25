@@ -26,7 +26,6 @@ class BrentOilFeatureEngineering:
         self.df['day'] = self.df.index.day
         self.df['day_of_week'] = self.df.index.dayofweek
         self.df['days_since_start'] = (self.df.index - self.df.index.min()).days
-        self.df.drop['Date' axis=1, inpllace=True]
         print("✅ Datetime features created!")
 
     def create_lag_features(self, lags=[1, 7, 30]):
